@@ -1,0 +1,416 @@
+import React, { useState } from "react";
+
+// REALDAY — Story-first career exploration MVP
+// Single-file React app with a simple landing page + embedded demo modules
+// Tailwind classes assumed available per canvas guidelines
+
+const modules = [
+  {
+    id: "accountant",
+    title: "Accountant (Small Business)",
+    summary:
+      "Accountants help people and businesses understand their money. Follow Alex through a full day at a neighborhood bakery.",
+    sections: [
+      {
+        heading: "Morning — Solving a Money Mystery",
+        body: (
+          <>
+            <p className="mb-3">
+              The bakery owner calls because last month’s sales don’t add up. Alex
+              opens the bank portal on one screen and the point‑of‑sale report on
+              the other. Three orders are recorded twice; one card payment never
+              settled. Alex highlights the duplicates, attaches a screenshot, and
+              drafts a short note in plain English: “These three receipts were
+              submitted twice; this payment is still pending. Once we update the
+              register and confirm with the bank, revenue and deposits will
+              match.”
+            </p>
+            <p>
+              Ten minutes later, the owner replies with relief. Alex logs the fix
+              in the client file and adds a one‑line prevention tip for next
+              month: “Run the ‘settlements’ report before exporting sales.”
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "Midday — Making Numbers Useful",
+        body: (
+          <>
+            <p className="mb-3">
+              Alex assembles the monthly snapshot: total sales, ingredient costs,
+              labor hours, and profit. A quick trend view shows flour costs up
+              15% and evening shift labor creeping above plan. Instead of
+              dumping numbers, Alex writes a short, human summary for the
+              manager: “Flour rose after a supplier switch; weekends added an
+              extra evening shift.”
+            </p>
+            <div className="bg-white/60 rounded-xl p-3 mb-3 text-sm font-mono overflow-auto">
+              <pre>{`Month Summary (Bakery)
+Sales .......... $82,450
+Ingredients .... $31,220  (Flour +15% vs last month)
+Labor .......... $24,980  (Evening shift +2 hrs/week)
+Net Profit ..... $14,310
+Notes: Swap back to prior flour supplier; trial 2 evening shifts.`}</pre>
+            </div>
+            <p>
+              In a quick huddle, Alex points to two concrete ideas: trim one
+              weekend shift and revert to the cheaper flour supplier. The
+              manager nods—decisions made.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "Afternoon — Guiding a Colleague",
+        body: (
+          <>
+            <p className="mb-3">
+              A junior accountant pings Alex: “Where do we put the new online
+              ordering software?” Alex screenshares the ledger and says: “Recurring
+              software lives under Operating Expenses → Software. Mark it as a
+              monthly subscription so the report updates automatically.” They walk
+              through the exact dropdowns and save a template so future entries
+              take 10 seconds, not 10 minutes.
+            </p>
+            <p>
+              Before logging off, Alex sets two reminders: check the missing
+              deposit tomorrow and request quotes from the previous flour supplier.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "End of Day — What This Job Feels Like",
+        body: (
+          <>
+            <p>
+              It’s part detective work, part translation: spot discrepancies,
+              fix them, and explain what it means so people can act. Attention to
+              detail matters—but so do clear explanations and small process
+              improvements that save everyone time.
+            </p>
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    id: "nurse",
+    title: "Registered Nurse (Hospital)",
+    summary:
+      "RNs coordinate care, communicate under pressure, and keep patients stable. Follow Maria through a 12‑hour shift.",
+    sections: [
+      {
+        heading: "7:00 a.m. — Shift Report & First Rounds",
+        body: (
+          <>
+            <p className="mb-3">
+              At the station, Maria gets three patients: a knee‑replacement
+              recovery, a pneumonia case on oxygen, and a new admission waiting
+              for labs. She checks vitals, confirms meds, and explains the plan
+              for the morning in everyday language—no jargon, no guessing.
+            </p>
+            <p>
+              Mr. Thompson (post‑op) winces. Maria checks his pain score and
+              adjusts the IV per the order. “This should help in fifteen minutes;
+              I’ll be back to recheck.” She notes the change in the chart so the
+              whole team sees it.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "10:30 a.m. — A Scare in Room 204",
+        body: (
+          <>
+            <p className="mb-3">
+              An alarm chirps—oxygen saturation dropped for the pneumonia
+              patient. Maria elevates the head of the bed, increases oxygen per
+              protocol, and calls respiratory. While they set up a nebulizer,
+              she coaches the patient’s breathing: “In through your nose, out
+              through your mouth—we’re with you.” The monitor steadies; Maria
+              logs every step.
+            </p>
+            <p>
+              Over lunch (at her desk), she answers a daughter’s questions about
+              recovery timelines and side effects in plain terms. Half the job is
+              clinical; half is keeping families informed and calm.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "Afternoon — Teaching & Teamwork",
+        body: (
+          <>
+            <p className="mb-3">
+              A new nurse struggles with an IV start—the vein rolls. Maria says,
+              “Happens to everyone. Anchor here, shallow angle.” She demonstrates,
+              then lets the junior nurse try again. It’s a quick win and a boost
+              of confidence.
+            </p>
+            <p>
+              Before shift change, Maria reconciles meds, updates charts, and
+              flags one lab result for the night team with a sticky note: “Recheck
+              potassium at 22:00.” Hand‑offs are crisp; that’s how units run.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "6:45 p.m. — What This Job Feels Like",
+        body: (
+          <>
+            <p>
+              Nursing is fast decisions, steady communication, and small
+              technical skills repeated with care. When alarms quiet and patients
+              rest easier, that’s a good day.
+            </p>
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    id: "developer",
+    title: "Software Developer (Product Team)",
+    summary:
+      "Developers turn ideas into working features and keep products reliable. Follow Jay on a sprint day at a startup.",
+    sections: [
+      {
+        heading: "9:15 a.m. — Standup & Priorities",
+        body: (
+          <>
+            <p className="mb-3">
+              Jay scans yesterday’s error dashboard over coffee. At 9:30, the
+              team standup is quick: one bug causing empty carts on mobile,
+              plus a small feature—“save for later.” Jay volunteers to tackle the
+              bug first; revenue is leaking.
+            </p>
+            <div className="bg-white/60 rounded-xl p-3 mb-3 text-sm font-mono overflow-auto">
+              <pre>{`Bug: Mobile cart clears on app resume
+Hypothesis: State not persisted on background → foreground
+Plan: Reproduce → add persistence → write test → ship hotfix`}</pre>
+            </div>
+          </>
+        ),
+      },
+      {
+        heading: "Late Morning — Hunting a Bug",
+        body: (
+          <>
+            <p className="mb-3">
+              On a test phone, Jay adds two items, backgrounds the app, and
+              returns—cart is empty. The session store resets on resume. In the
+              cart component, Jay moves the state into a persistent store and
+              adds a unit test so this never slips again.
+            </p>
+            <div className="bg-white/60 rounded-xl p-3 mb-3 text-sm font-mono overflow-auto">
+              <pre>{`// pseudo-test
+it('keeps cart after resume', () => {
+  addToCart(['A','B']);
+  simulateBackgroundResume();
+  expect(cart.items).toEqual(['A','B']);
+});`}</pre>
+            </div>
+            <p>
+              After code review (“nice test coverage”), Jay ships a hotfix; ops
+              watches error rates drop. The sales lead pings: “Cart recoveries
+              up already. Thank you.”
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "Afternoon — Feature Work & Collaboration",
+        body: (
+          <>
+            <p className="mb-3">
+              For “save for later,” Jay sketches a quick flow—tap bookmark → move
+              item to a saved list visible on all devices. A designer shares a
+              mock; Jay hooks the UI to an API endpoint and writes a migration to
+              store the list per user.
+            </p>
+            <p>
+              Before wrap‑up, Jay helps a teammate decipher a flaky test: the
+              mock clock wasn’t advancing. Two lines later, green checks across
+              the board.
+            </p>
+          </>
+        ),
+      },
+      {
+        heading: "5:45 p.m. — What This Job Feels Like",
+        body: (
+          <>
+            <p>
+              It’s part debugging, part building. Short feedback loops, lots of
+              reading and writing code, and frequent chats with design and product
+              to keep users happy.
+            </p>
+          </>
+        ),
+      },
+    ],
+  },
+];
+
+function ModuleCard({ m, onOpen }: { m: any; onOpen: () => void }) {
+  return (
+    <div className="bg-white/70 backdrop-blur rounded-2xl p-5 shadow hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
+      <div>
+        <h3 className="text-lg font-semibold mb-1">{m.title}</h3>
+        <p className="text-sm text-slate-700">{m.summary}</p>
+      </div>
+      <button
+        onClick={onOpen}
+        className="mt-4 self-start px-4 py-2 rounded-xl bg-black text-white text-sm"
+      >
+        Read the day →
+      </button>
+    </div>
+  );
+}
+
+function ModuleView({ m, onClose }: { m: any; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+      <div className="max-w-3xl w-full bg-white rounded-2xl p-6 overflow-y-auto max-h-[90vh]">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">{m.title}</h2>
+          <button onClick={onClose} className="text-slate-600 hover:text-black">
+            ✕
+          </button>
+        </div>
+        <p className="text-slate-700 mb-6">{m.summary}</p>
+        {m.sections.map((s: any, i: number) => (
+          <div key={i} className="mb-6">
+            <h4 className="font-semibold mb-2">{s.heading}</h4>
+            <div className="prose max-w-none">{s.body}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [open, setOpen] = useState<string | null>(null);
+  const current = modules.find((m) => m.id === open);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-amber-100 via-rose-100 to-sky-100 text-slate-900">
+      {/* NAV */}
+      <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className="font-extrabold tracking-tight text-xl">RealDay</div>
+        <a href="#demo" className="text-sm underline">Try the demo</a>
+      </div>
+
+      {/* HERO */}
+      <header className="max-w-6xl mx-auto px-6 pb-6 pt-2">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+              Careers that kids can <span className="underline">actually picture</span>.
+            </h1>
+            <p className="text-lg text-slate-700 mb-6">
+              RealDay is a story‑first career exploration platform. No quizzes, no
+              jargon—just vivid “day in the life” journeys that show what people
+              really do at work.
+            </p>
+            <div className="flex gap-3">
+              <a href="#demo" className="px-5 py-3 rounded-xl bg-black text-white text-sm">See sample modules</a>
+              <a href="#waitlist" className="px-5 py-3 rounded-xl bg-white/70 text-sm border border-black/10">Join the waitlist</a>
+            </div>
+          </div>
+          <div className="bg-white/60 rounded-2xl p-5 shadow">
+            <h3 className="font-semibold mb-2">What’s different</h3>
+            <ul className="list-disc pl-5 text-sm text-slate-700 space-y-2">
+              <li>Story‑first modules: follow a real day (morning → evening).</li>
+              <li>Concrete details over generic descriptions.</li>
+              <li>Designed for middle & high school exploration.</li>
+              <li>Built to scale across dozens of careers with a repeatable template.</li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      {/* PROBLEM / SOLUTION */}
+      <section className="max-w-6xl mx-auto px-6 py-10">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white/60 rounded-2xl p-6">
+            <h3 className="text-xl font-bold mb-2">The problem</h3>
+            <p className="text-slate-700 text-sm">
+              Students are asked to choose majors and careers without ever seeing
+              what those jobs feel like. Most sites list salaries and duties; few
+              make the work tangible. Result: confusion, generic choices, and
+              regret.
+            </p>
+          </div>
+          <div className="bg-white/60 rounded-2xl p-6">
+            <h3 className="text-xl font-bold mb-2">Our approach</h3>
+            <p className="text-slate-700 text-sm">
+              We use narrative, plain‑language storytelling to show a day in the
+              life across roles—from small business accounting to hospital nursing
+              to product engineering. Kids see the pace, the decisions, and the
+              people, not just a bullet list of tasks.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* DEMO */}
+      <section id="demo" className="max-w-6xl mx-auto px-6 py-10">
+        <h2 className="text-2xl font-extrabold mb-4">Try the demo</h2>
+        <p className="text-slate-700 mb-6 text-sm">
+          Click a card to read a true‑to‑life day. More careers coming as we grow the library.
+        </p>
+        <div className="grid md:grid-cols-3 gap-5">
+          {modules.map((m) => (
+            <ModuleCard key={m.id} m={m} onOpen={() => setOpen(m.id)} />
+          ))}
+        </div>
+      </section>
+
+      {/* WAITLIST */}
+      <section id="waitlist" className="max-w-6xl mx-auto px-6 py-12">
+        <div className="bg-white/70 rounded-2xl p-6 md:p-8">
+          <h3 className="text-xl font-bold mb-2">Be first to pilot</h3>
+          <p className="text-slate-700 text-sm mb-4">
+            Educators, parents, and students: join the list to get early access
+            and help shape the modules we build next.
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement)?.value;
+              if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                alert('Enter a valid email');
+                return;
+              }
+              alert('Thanks! We\'ll be in touch about early access.');
+            }}
+            className="flex flex-col sm:flex-row gap-3"
+          >
+            <input
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              className="flex-1 rounded-xl border border-slate-300 px-4 py-3"
+            />
+            <button className="px-5 py-3 rounded-xl bg-black text-white text-sm">
+              Join waitlist
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <footer className="max-w-6xl mx-auto px-6 pb-16 text-xs text-slate-600">
+        © {new Date().getFullYear()} RealDay — story‑first career exploration (MVP).
+      </footer>
+
+      {current && <ModuleView m={current} onClose={() => setOpen(null)} />}
+    </div>
+  );
+}
